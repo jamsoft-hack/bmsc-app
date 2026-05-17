@@ -7,7 +7,13 @@ interface Route {
   data object Splash : Route
 
   @Serializable
+  data object Login : Route
+
+  @Serializable
   data object Home : Route
+
+  @Serializable
+  data object CreateStreak : Route
 
   @Serializable
   data class Onboarding(val modality: String): Route

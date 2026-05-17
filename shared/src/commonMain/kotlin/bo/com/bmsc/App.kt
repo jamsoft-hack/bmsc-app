@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+<<<<<<< HEAD
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -19,9 +20,26 @@ import bo.com.bmsc.home.presentation.screen.HomeScreen
 import bo.com.bmsc.app.theme.BMSCTheme
 import bo.com.bmsc.core.extension.replace
 import org.koin.compose.koinInject
+=======
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import bo.com.bmsc.app.theme.BMSCTheme
+import bo.com.bmsc.auth.presentation.screen.LoginScreen
+import bo.com.bmsc.core.extension.replace
+import bo.com.bmsc.core.extension.safePopBackStack
+import bo.com.bmsc.home.presentation.screen.HomeScreen
+import bo.com.bmsc.streak.presentation.screen.CreateStreakScreen
+import kotlinx.serialization.Serializable
+
+@Serializable
+object Home
+>>>>>>> 80f06f9 (implementation login)
 
 @Composable
 fun App() {
+<<<<<<< HEAD
   val navController = rememberNavController()
   val navigationHelper: NavigationHelper = koinInject()
 
@@ -91,4 +109,41 @@ private fun NavHostController.safeNavigate(route: Route) {
 
 private fun NavHostController.safePopBackStack(): Boolean {
   return popBackStack()
+=======
+    BMSCTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background,
+        ) {
+            val navController = rememberNavController()
+
+            NavHost(
+                navController = navController,
+                startDestination = Route.Login,
+            ) {
+                composable<Route.Login> {
+                    LoginScreen(
+                        onNavigateToHome = {
+                            navController.replace(Route.Home)
+                        },
+                        onNavigateToRegister = { /* TODO: Register screen */ },
+                        onNavigateToForgotPassword = { /* TODO: Forgot password screen */ },
+                        onNavigateToFaceId = { /* TODO: Face ID screen */ },
+                    )
+                }
+
+                composable<Route.Home> {
+                    HomeScreen()
+                }
+
+                composable<Route.CreateStreak> {
+                    CreateStreakScreen(
+                        onNavigateBack = { navController.safePopBackStack() },
+                        onNavigateToNextStep = { /* TODO: Step 2 */ },
+                    )
+                }
+            }
+        }
+    }
+>>>>>>> 80f06f9 (implementation login)
 }
