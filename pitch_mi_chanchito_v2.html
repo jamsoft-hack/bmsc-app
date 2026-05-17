@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Chanchito · BMSC Pitch v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --g:#1E7C4B;--gm:#2D9A5F;--gl:#E8F5EE;--gd:#0D2318;
+  --ac:#F5A623;--w:#fff;--off:#F5F8F5;--txt:#1A2E22;--mu:#6B8A77;
+}
+html,body{width:100%;height:100%;overflow:hidden;background:#000}
+body{font-family:'DM Sans',sans-serif;color:var(--w)}
+
+#deck{width:100vw;height:100vh;position:relative;overflow:hidden}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;
+  opacity:0;pointer-events:none;transition:opacity .4s ease,transform .4s ease;transform:translateX(50px)}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.slide.exit{opacity:0;transform:translateX(-50px)}
+
+/* BG TYPES */
+.bg-hero{background:var(--gd)}
+.bg-dark{background:#0F1F17}
+.bg-mid{background:#0A1810}
+.bg-split{background:var(--gd);display:grid!important;grid-template-columns:1fr 1fr;padding:0!important}
+.bg-close{background:var(--gd)}
+
+/* LAYOUT */
+.pad{padding:64px 96px}
+.center{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+
+/* TYPOGRAPHY */
+.tag{font-size:13px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gm);border:1px solid #2D9A5F55;padding:6px 16px;border-radius:20px;display:inline-block;margin-bottom:24px}
+.tag-amber{color:var(--ac);border-color:#F5A62355}
+h1{font-family:'DM Sans',sans-serif;font-size:clamp(50px,7vw,96px);font-weight:700;line-height:1.05;letter-spacing:-1px}
+h2{font-family:'DM Sans',sans-serif;font-size:clamp(34px,4.5vw,62px);font-weight:700;line-height:1.2;letter-spacing:-.5px}
+h3{font-family:'DM Sans',sans-serif;font-size:clamp(20px,2.4vw,30px);font-weight:700}
+.lead{font-size:clamp(18px,2vw,24px);font-weight:300;line-height:1.65;color:#B8D4C4}
+.num{font-family:'DM Sans',sans-serif;font-size:clamp(56px,8vw,108px);font-weight:800;color:var(--gm);line-height:1}
+.num-sm{font-family:'DM Sans',sans-serif;font-size:clamp(36px,5vw,64px);font-weight:800;line-height:1}
+.src{font-size:12px;color:#6B8A77;margin-top:4px;letter-spacing:.04em}
+
+/* DIVIDER */
+.div{width:48px;height:4px;background:var(--gm);border-radius:2px;margin:20px 0}
+
+/* CARDS */
+.card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px 24px}
+.card-accent{background:rgba(45,154,95,.15);border:1px solid rgba(45,154,95,.3);border-radius:16px;padding:28px 24px}
+
+/* PILLS */
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:500;padding:6px 14px;border-radius:20px}
+.pg{background:#1E7C4B22;color:#5FC98A;border:1px solid #1E7C4B44}
+.pa{background:#F5A62322;color:var(--ac);border:1px solid #F5A62344}
+.pr{background:#E24B4A22;color:#E87171;border:1px solid #E24B4A44}
+
+/* PHONE */
+.phone-outer{display:flex;align-items:center;justify-content:center;height:100%;background:#060E0A;position:relative}
+.phone{width:230px;border-radius:36px;border:3px solid #2D4A38;overflow:hidden;background:#fff;color:var(--txt);box-shadow:0 28px 70px rgba(0,0,0,.7)}
+.phone-bar{background:#E8F5EE;padding:10px 14px 6px;display:flex;justify-content:space-between;align-items:center}
+.phone-bar-title{font-size:12px;font-weight:500;color:var(--txt)}
+.pscreen{background:var(--off);min-height:380px}
+
+/* PHONE SCREENS */
+/* Screen: Home BMSC */
+.s-home{padding:14px}
+.home-head{font-size:9px;color:var(--mu);margin-bottom:2px}
+.home-bal{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--txt);margin-bottom:2px}
+.home-sub{font-size:8px;color:var(--mu);margin-bottom:10px}
+.home-icons{display:flex;gap:10px;margin-bottom:12px}
+.home-ico{background:var(--gl);border-radius:10px;padding:8px;font-size:16px;text-align:center;flex:1}
+.home-ico span{display:block;font-size:7px;color:var(--g);margin-top:3px;font-weight:500}
+.banner{background:linear-gradient(135deg,#4A5FC1,#6B73D4);border-radius:12px;padding:12px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.banner-badge{font-size:8px;font-weight:700;color:#fff;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:8px;margin-bottom:4px}
+.banner-title{font-size:11px;font-weight:700;color:#fff}
+.banner-sub{font-size:8px;color:rgba(255,255,255,.8)}
+.acct{border:1px solid #E0EBE4;border-radius:10px;padding:8px 10px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+.acct-l{font-size:9px;font-weight:500;color:var(--txt)}
+.acct-s{font-size:8px;color:var(--mu)}
+.acct-r{font-size:9px;font-weight:600;color:var(--txt);text-align:right}
+.acct-rs{font-size:7px;color:var(--g)}
+.gold-card{background:#FFC542;border-radius:10px;padding:10px;display:flex;justify-content:space-between;align-items:center}
+.gold-title{font-size:8px;font-weight:500;color:#7A4A00}
+.gold-rate{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:#7A4A00}
+
+/* Screen: Onboarding */
+.s-onboard{padding:14px 14px 18px;display:flex;flex-direction:column;align-items:center;text-align:center;background:#f0f7f2}
+.ob-pig{font-size:52px;margin:20px 0 12px}
+.ob-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--txt);margin-bottom:6px}
+.ob-sub{font-size:10px;color:var(--mu);line-height:1.4;margin-bottom:20px}
+.ob-btn{background:var(--g);color:#fff;border-radius:12px;padding:10px;font-size:11px;font-weight:500;width:100%;text-align:center}
+
+/* Screen: Contacts */
+.s-contacts{padding:12px}
+.ct-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--txt);margin-bottom:2px}
+.ct-sub{font-size:9px;color:var(--mu);margin-bottom:10px}
+.ct-tabs{display:flex;gap:6px;margin-bottom:10px}
+.ct-tab{font-size:8px;font-weight:500;border:1px solid #C8DDD1;border-radius:8px;padding:4px 8px;color:var(--g)}
+.contact-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;border-bottom:1px solid #EEF4F0}
+.av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:#fff;flex-shrink:0}
+.cn{font-size:10px;font-weight:500;color:var(--txt);margin-left:8px;flex:1}
+.chk{width:16px;height:16px;border-radius:50%;border:1.5px solid #C8DDD1;flex-shrink:0}
+.chk.on{background:var(--g);border-color:var(--g);display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff}
+
+/* Screen: Config */
+.s-config{padding:12px;background:var(--off)}
+.cfg-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--txt);margin-bottom:2px}
+.cfg-sub{font-size:9px;color:var(--mu);margin-bottom:10px}
+.cfg-label{font-size:9px;font-weight:600;color:var(--txt);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.cfg-opts{display:flex;gap:5px;margin-bottom:10px;flex-wrap:wrap}
+.cfg-opt{font-size:9px;padding:4px 10px;border-radius:8px;border:1px solid #C8DDD1;color:var(--mu)}
+.cfg-opt.on{background:var(--g);color:#fff;border-color:var(--g)}
+.cfg-input{border:1px solid #C8DDD1;border-radius:8px;padding:6px 10px;margin-bottom:10px;background:#fff}
+.cfg-bs{font-size:9px;color:var(--mu)}
+.cfg-bsn{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--txt)}
+
+/* Screen: Confirm */
+.s-confirm{padding:12px;background:var(--off)}
+.conf-box{background:linear-gradient(135deg,#4A5FC1,#6B73D4);border-radius:12px;padding:12px;margin-bottom:10px}
+.conf-season{font-size:8px;color:rgba(255,255,255,.7);margin-bottom:2px}
+.conf-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:#fff;margin-bottom:1px}
+.conf-meta{font-size:8px;color:rgba(255,255,255,.8)}
+.conf-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #E0EBE4}
+.conf-key{font-size:9px;color:var(--mu)}
+.conf-val{font-size:9px;font-weight:500;color:var(--txt)}
+.conf-enc{font-size:8px;color:#388C5C;font-weight:500;margin:8px 0 6px}
+.pin-row{display:flex;gap:4px;margin-bottom:10px}
+.pin-box{width:26px;height:28px;border:1px solid #C8DDD1;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--txt);background:#fff}
+
+/* Screen: Racha */
+.s-racha{padding:12px;background:var(--off)}
+.r-pig-area{text-align:center;margin-bottom:8px;position:relative}
+.r-badge{background:#1A2E22;color:#5FC98A;font-size:8px;padding:3px 8px;border-radius:8px;display:inline-block;margin-bottom:6px}
+.r-pig{font-size:44px}
+.r-days{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--txt)}
+.r-sub{font-size:9px;color:var(--mu)}
+.r-week{background:#fff;border-radius:10px;padding:8px 10px;margin-bottom:8px;border:1px solid #E0EBE4}
+.r-wt{display:flex;justify-content:space-between;font-size:9px;margin-bottom:6px}
+.r-wt b{color:var(--txt)}
+.r-wt span{color:var(--g);font-weight:500}
+.r-bar{background:#E0EBE4;border-radius:3px;height:4px;margin-bottom:8px}
+.r-fill{background:var(--g);height:4px;border-radius:3px;width:75%}
+.r-avs{display:flex;gap:5px}
+.r-av{text-align:center}
+.r-av .av{width:28px;height:28px;font-size:9px;margin:0 auto 2px}
+.r-av span{font-size:7px;color:var(--mu);display:block}
+.r-next{background:#fff;border-radius:10px;padding:8px 10px;margin-bottom:8px;border:1px solid #E0EBE4}
+.r-nl{font-size:8px;color:var(--mu);margin-bottom:1px}
+.r-na{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--txt)}
+.r-ns{font-size:8px;color:var(--mu)}
+.r-btn{background:var(--g);color:#fff;border-radius:10px;padding:9px;text-align:center;font-size:10px;font-weight:500}
+
+/* Screen: Aportar */
+.s-aportar{padding:12px;background:var(--off)}
+.ap-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--txt);margin-bottom:2px}
+.ap-sub{font-size:9px;color:var(--mu);margin-bottom:10px}
+.ap-opt{display:flex;align-items:center;justify-content:space-between;padding:9px 10px;border-radius:10px;margin-bottom:6px;border:1.5px solid #E0EBE4;background:#fff}
+.ap-opt.on{border-color:var(--g);background:#F0FBF4}
+.ap-oname{font-size:10px;font-weight:500;color:var(--txt)}
+.ap-osub{font-size:8px;color:var(--mu)}
+.ap-radio{width:14px;height:14px;border-radius:50%;border:1.5px solid #C8DDD1}
+.ap-radio.on{border-color:var(--g);background:var(--g);display:flex;align-items:center;justify-content:center}
+.ap-radio.on::after{content:'';width:5px;height:5px;border-radius:50%;background:#fff}
+.ap-amount{border:1px solid #C8DDD1;border-radius:10px;padding:12px;margin:10px 0;text-align:center;background:#fff}
+.ap-min{font-size:8px;color:var(--mu)}
+.ap-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;color:var(--txt)}
+.ap-chips{display:flex;gap:5px;margin-bottom:10px}
+.ap-chip{font-size:9px;padding:4px 10px;border-radius:8px;border:1px solid #C8DDD1;color:var(--mu)}
+.ap-chip.on{background:var(--g);color:#fff;border-color:var(--g)}
+.ap-btn{background:var(--g);color:#fff;border-radius:10px;padding:10px;text-align:center;font-size:11px;font-weight:500}
+
+/* Screen: Celebration */
+.s-celeb{padding:14px;background:#F0FBF4;text-align:center;display:flex;flex-direction:column;align-items:center}
+.cel-top{font-size:9px;font-weight:700;color:var(--g);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+.cel-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--txt);margin-bottom:4px}
+.cel-sub{font-size:9px;color:var(--mu);margin-bottom:12px}
+.cel-pig{font-size:48px;margin-bottom:12px}
+.cel-box{background:var(--ac);border-radius:12px;padding:12px;width:100%;margin-bottom:8px;text-align:left}
+.cel-bl{font-size:8px;color:#7A4A00;margin-bottom:2px}
+.cel-bv{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:#7A4A00}
+.cel-bsub{font-size:8px;color:#9B6200;margin-top:1px}
+.cel-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(0,0,0,.06)}
+.cel-rl{font-size:8px;color:var(--mu)}
+.cel-rv{font-size:8px;font-weight:600;color:var(--txt)}
+.cel-btn{background:var(--g);color:#fff;border-radius:10px;padding:9px;font-size:10px;font-weight:500;width:100%;margin-top:8px}
+.cel-link{font-size:9px;color:var(--g);text-decoration:underline;margin-top:6px}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px}
+
+/* STEP */
+.step{display:flex;gap:20px;margin-bottom:24px;align-items:flex-start}
+.step-n{width:40px;height:40px;border-radius:50%;background:var(--g);display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-weight:700;font-size:18px;flex-shrink:0}
+.step-b h3{font-size:20px;margin-bottom:4px}
+.step-b p{font-size:16px;color:#B8D4C4;line-height:1.5}
+
+/* STAT CALLOUT */
+.stat-big{text-align:center;padding:24px 16px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:16px}
+
+/* TIMELINE */
+.tl{display:flex;margin-top:32px}
+.tl-i{flex:1;padding:20px 16px;position:relative}
+.tl-i::before{content:'';position:absolute;top:32px;left:0;right:0;height:2px;background:rgba(255,255,255,.07)}
+.tl-d{width:14px;height:14px;border-radius:50%;background:var(--gm);position:relative;z-index:1;margin-bottom:12px}
+.tl-l{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#6B8A77;margin-bottom:5px}
+.tl-t{font-size:16px;font-weight:500;line-height:1.4}
+
+/* FLOW SCREENS */
+.flow{display:flex;align-items:center;gap:14px;justify-content:center;padding:36px 48px;flex:1}
+.flow-phone{width:140px;flex-shrink:0}
+.flow-phone .phone{width:140px;border-radius:26px;border-width:2.5px}
+.flow-phone .pscreen{min-height:280px}
+.flow-label{font-size:11px;color:#6B8A77;text-align:center;margin-top:8px;font-weight:500}
+.flow-arr{color:#2D4A38;font-size:24px;flex-shrink:0}
+
+/* BMSC BADGE */
+.bmsc{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:7px 16px;font-size:14px;font-weight:500}
+
+/* NAV */
+#nav{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:10px;background:rgba(13,26,19,.88);
+  border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(14px);
+  border-radius:40px;padding:9px 18px;z-index:100}
+.nd{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.18);cursor:pointer;transition:all .2s}
+.nd.on{background:var(--gm);width:20px;border-radius:3px}
+#np,#nn{background:none;border:none;color:#fff;cursor:pointer;font-size:17px;opacity:.55;transition:opacity .2s;padding:0 2px}
+#np:hover,#nn:hover{opacity:1}
+#sc{font-size:10px;color:#6B8A77;min-width:28px;text-align:center}
+
+/* TIMER */
+#tw{position:fixed;top:20px;right:24px;z-index:100;
+  background:rgba(13,26,19,.88);border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(14px);border-radius:10px;padding:7px 14px;
+  display:flex;align-items:center;gap:8px}
+#td{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;letter-spacing:1px}
+#tb{background:none;border:1px solid rgba(255,255,255,.18);color:var(--w);
+  border-radius:5px;padding:2px 9px;font-size:10px;cursor:pointer;font-family:inherit}
+#tb:hover{background:rgba(255,255,255,.08)}
+#tw.warn #td{color:var(--ac)}
+#tw.danger #td{color:#E87171}
+
+/* NOTES */
+#nb{position:fixed;top:20px;left:24px;z-index:100;
+  background:rgba(13,26,19,.88);border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(14px);border-radius:10px;padding:7px 13px;
+  font-size:10px;color:#6B8A77;cursor:pointer;font-family:inherit}
+#nb:hover{color:#fff}
+#notes{position:fixed;bottom:70px;left:24px;right:24px;z-index:99;
+  background:rgba(8,18,12,.93);border:1px solid rgba(255,255,255,.07);
+  backdrop-filter:blur(14px);border-radius:10px;padding:12px 18px;
+  font-size:12px;color:#B8D4C4;line-height:1.6;display:none;max-height:110px;overflow:auto}
+#notes strong{color:#fff}
+
+/* PROGRESS */
+#tp{position:fixed;top:0;left:0;height:2px;background:var(--gm);z-index:200;transition:width .4s}
+
+/* ANIMATE */
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.slide.active .a{animation:up .5s ease forwards;opacity:0}
+.slide.active .a1{animation-delay:.08s}
+.slide.active .a2{animation-delay:.18s}
+.slide.active .a3{animation-delay:.28s}
+.slide.active .a4{animation-delay:.38s}
+.slide.active .a5{animation-delay:.48s}
+</style>
+</head>
+<body>
+<div id="tp"></div>
+<div id="tw"><div id="td">3:00</div><button id="tb" onclick="toggleTimer()">Iniciar</button></div>
+<button id="nb" onclick="toggleNotes()">📋 Notas</button>
+<div id="notes"></div>
+
+<div id="deck">
+
+<!-- ═══ SLIDE 1: HOOK ═══ -->
+<div class="slide bg-hero pad center active"
+  data-notes="Arranca con fuerza. Di: 'En Bolivia, casi la mitad de los jóvenes todavía guarda su plata en una alcancía.' Pausa. Deja que el número impacte. Luego di: 'No es que no quieran ahorrar. Es que nadie les dio una razón real para hacerlo en un banco.'">
+
+  <div class="a a1"><span class="bmsc">Banco Mercantil Santa Cruz · Neo-Ahorro</span></div>
+  <div style="height:28px"></div>
+  <div class="a a2">
+    <h1>Los jóvenes<br>bolivianos<br><span style="color:var(--gm)">no ahorran</span><br>en bancos.</h1>
+  </div>
+  <div style="height:20px"></div>
+  <div class="a a3">
+    <p class="lead">No es falta de voluntad.<br>Es falta de incentivo.</p>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 2: PROBLEMA ═══ -->
+<div class="slide bg-dark pad"
+  data-notes="Di: 'La brecha no es de dinero. Es de experiencia. El banco no habla el idioma de los jóvenes.' Señala cada card brevemente, no la leas. Termina con: 'Ahorro formal vs informal en Bolivia es 26% vs 47%. Eso es la oportunidad.'">
+
+  <div class="a a1"><span class="tag tag-amber">El problema</span></div>
+  <div class="a a2"><h2>La banca tradicional<br>habla un <span style="color:var(--ac)">idioma viejo</span></h2></div>
+  <div class="div a a3"></div>
+  <div class="g2 a a3" style="margin-top:4px">
+    <div class="card">
+      <div style="font-size:32px;margin-bottom:12px">😴</div>
+      <h3 style="font-family:'DM Sans',sans-serif;font-size:20px;font-weight:700;margin-bottom:10px">Sin enganche emocional</h3>
+      <p style="font-size:16px;color:#B8D4C4;line-height:1.6">Abrir una cuenta de ahorro no da ninguna satisfacción. No hay progreso visible, no hay comunidad.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:32px;margin-bottom:12px">🏝️</div>
+      <h3 style="font-family:'DM Sans',sans-serif;font-size:20px;font-weight:700;margin-bottom:10px">Experiencia solitaria</h3>
+      <p style="font-size:16px;color:#B8D4C4;line-height:1.6">Ahorrar es un acto completamente privado. La Gen Z quiere conexión, no soledad financiera.</p>
+    </div>
+    <div class="card">
+      <div style="font-size:32px;margin-bottom:12px">⚡</div>
+      <h3 style="font-family:'DM Sans',sans-serif;font-size:20px;font-weight:700;margin-bottom:10px">Sin gratificación inmediata</h3>
+      <p style="font-size:16px;color:#B8D4C4;line-height:1.6">El resultado se ve en décadas. La Gen Z necesita feedback en tiempo real para mantener un hábito.</p>
+    </div>
+    <div class="card" style="border-color:rgba(45,154,95,.35)">
+      <div style="font-size:32px;margin-bottom:12px"></div>
+      <h3 style="font-family:'DM Sans',sans-serif;font-size:20px;font-weight:700;margin-bottom:10px;color:var(--gm)">La oportunidad</h3>
+      <p style="font-size:16px;color:#B8D4C4;line-height:1.6"><strong style="color:#fff">52% más</strong> de probabilidad de ahorrar si hay un sistema de recompensas y metas visuales. (Gen Z LatAm, Samy 2024)</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 3: IMPACTO BMSC ═══ -->
+<div class="slide bg-dark pad"
+  data-notes="Habla al jurado como si fueran el banco. Di: 'Para el BMSC, esto no es una app bonita. Es una estrategia de captación de pasivos.' Usa los tres pilares. El dato clave: dinero encapsulado = depósito estable. Termina mencionando el roadmap.">
+
+  <div class="a a1"><span class="tag">Impacto para el banco</span></div>
+  <div class="a a2"><h2>¿Qué gana el<br><span style="color:var(--gm)">Banco Mercantil Santa Cruz?</span></h2></div>
+  <div class="div a a3"></div>
+  <div class="g3 a a3">
+    <div class="stat-big">
+      <h3 style="font-family:'DM Sans',sans-serif;font-size:28px;font-weight:700;color:var(--gm);margin-bottom:12px">↑ Pasivos</h3>
+      <p style="font-size:16px;color:#B8D4C4;line-height:1.6">Cada temporada = depósitos bloqueados predecibles. El banco sabe que ese dinero está ahí por 3, 6 o 12 meses.</p>
+    </div>
+    <div class="stat-big">
+      <h3 style="font-family:'DM Sans',sans-serif;font-size:28px;font-weight:700;color:var(--gm);margin-bottom:12px">🔒 Retención</h3>
+      <p style="font-size:16px;color:#B8D4C4;line-height:1.6">El compromiso grupal aumenta la permanencia. Un usuario en racha no cambia de banco a mitad de temporada.</p>
+    </div>
+    <div class="stat-big">
+      <h3 style="font-family:'DM Sans',sans-serif;font-size:28px;font-weight:700;color:var(--gm);margin-bottom:12px">Base Z</h3>
+      <p style="font-size:16px;color:#B8D4C4;line-height:1.6">Captura a los 47.8% que hoy ahorran en alcancía. Primer contacto con banca formal en 18–30 años.</p>
+    </div>
+  </div>
+  <div class="tl a a4">
+    <div class="tl-i"><div class="tl-d"></div><div class="tl-l" style="font-size:13px">Fase 1 · M 1–3</div><div class="tl-t" style="font-size:17px;font-weight:500">Lanzamiento, primeras rachas, adquisición de usuarios jóvenes</div></div>
+    <div class="tl-i"><div class="tl-d"></div><div class="tl-l" style="font-size:13px">Fase 2 · M 4–6</div><div class="tl-t" style="font-size:17px;font-weight:500">Ranking por temporada activo, recompensas del banco activadas</div></div>
+    <div class="tl-i"><div class="tl-d"></div><div class="tl-l" style="font-size:13px">Fase 3 · M 7–12</div><div class="tl-t" style="font-size:17px;font-weight:500">Segunda temporada, referidos virales, expansión a toda la red BMSC</div></div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 7: CIERRE ═══ -->
+<div class="slide bg-hero pad center"
+  data-notes="CIERRE. Mira al jurado. Di EXACTAMENTE esto, despacio: 'Mi Chanchito no le pide al joven boliviano que confíe en el banco. Le da una racha que no quiere perder.' Pausa larga. 'Gracias.' Y te quedas callado. No agregues nada.">
+
+  <div class="a a1"><span class="tag">En conclusión</span></div>
+  <div style="height:20px"></div>
+  <div class="a a3">
+    <h2 style="font-family:'DM Sans',sans-serif;font-size:clamp(28px,4.5vw,56px);font-weight:700;max-width:800px;line-height:1.2">Mi Chanchito no le pide al joven boliviano que <em>confíe</em> en el banco.</h2>
+    <div style="height:16px"></div>
+    <h2 style="font-family:'DM Sans',sans-serif;font-size:clamp(28px,4.5vw,56px);font-weight:700;color:var(--gm);line-height:1.2">Le da una racha<br>que no quiere perder.</h2>
+  </div>
+  <div style="height:32px"></div>
+  <div class="a a4" style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+    <span class="pill pg" style="font-size:15px;padding:8px 18px">Gamificación social</span>
+    <span class="pill pg" style="font-size:15px;padding:8px 18px">Ahorro colaborativo</span>
+    <span class="pill pg" style="font-size:15px;padding:8px 18px">Privacidad</span>
+    <span class="pill pg" style="font-size:15px;padding:8px 18px">Dinero encapsulado</span>
+    <span class="pill pa" style="font-size:15px;padding:8px 18px">Generación Z Bolivia</span>
+  </div>
+  <div style="height:24px"></div>
+  <div class="a a5" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:24px 40px;display:inline-block">
+    <div style="font-size:13px;color:#6B8A77;margin-bottom:6px">Mi Chanchito · BMSC Neo-Ahorro Hackathon 2026</div>
+    <div style="font-family:'DM Sans',sans-serif;font-size:22px;font-weight:700">Ahorrá junto. Crecé solo.</div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- NAV -->
+<div id="nav">
+  <button id="np" onclick="go(-1)">‹</button>
+  <div id="dots"></div>
+  <span id="sc">1/7</span>
+  <button id="nn" onclick="go(1)">›</button>
+</div>
+
+<script>
+const slides=document.querySelectorAll('.slide');
+const dotsEl=document.getElementById('dots');
+const sc=document.getElementById('sc');
+const tp=document.getElementById('tp');
+const notesEl=document.getElementById('notes');
+let cur=0,running=false,seconds=180,timerInt=null,showNotes=false;
+
+slides.forEach((_,i)=>{const d=document.createElement('div');d.className='nd'+(i===0?' on':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);});
+function sync(){document.querySelectorAll('.nd').forEach((d,i)=>d.className='nd'+(i===cur?' on':''));sc.textContent=`${cur+1}/4`;tp.style.width=((cur+1)/slides.length*100)+'%';const note=slides[cur].dataset.notes||'';notesEl.innerHTML=note?`<strong></strong> ${note}`:''}
+function goTo(n){if(n<0||n>=slides.length)return;slides[cur].classList.remove('active');slides[cur].classList.add('exit');setTimeout(()=>slides[cur].classList.remove('exit'),420);cur=n;slides[cur].classList.add('active');sync()}
+function go(d){goTo(cur+d)}
+document.addEventListener('keydown',e=>{if(['ArrowRight','ArrowDown',' '].includes(e.key)){e.preventDefault();go(1)}if(['ArrowLeft','ArrowUp'].includes(e.key)){e.preventDefault();go(-1)}if(e.key==='n'||e.key==='N')toggleNotes()});
+function pad(n){return n<10?'0'+n:n}
+function updateTimer(){const m=Math.floor(seconds/60),s=seconds%60;document.getElementById('td').textContent=`${pad(m)}:${pad(s)}`;document.getElementById('tw').className=seconds<=30?'danger':seconds<=60?'warn':''}
+function toggleTimer(){const btn=document.getElementById('tb');if(!running){running=true;btn.textContent='Pausar';timerInt=setInterval(()=>{if(seconds<=0){clearInterval(timerInt);running=false;btn.textContent='Reset';return}seconds--;updateTimer();},1000)}else{clearInterval(timerInt);running=false;if(seconds===0){seconds=180;updateTimer();btn.textContent='Iniciar'}else btn.textContent='Continuar'}}
+function toggleNotes(){showNotes=!showNotes;notesEl.style.display=showNotes?'block':'none';document.getElementById('nb').textContent=showNotes?'✕ Notas':'📋 Notas'}
+sync();
+</script>
+</body>
+</html>
