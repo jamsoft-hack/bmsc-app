@@ -28,11 +28,17 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.outlined.EmojiEvents
+import androidx.compose.material.icons.outlined.Group
+import androidx.compose.material.icons.outlined.History
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Text
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -57,16 +63,81 @@ import bo.com.bmsc.app.theme.MentaOnSurfaceVariant
 import bo.com.bmsc.app.theme.MentaPrimary
 import bo.com.bmsc.app.theme.MentaSurface
 import bo.com.bmsc.core.common.ResultState
+import bo.com.bmsc.core.navigation.NavigationHelper
 import bo.com.bmsc.gamification.domain.model.GamificationData
 import bo.com.bmsc.gamification.presentation.GamificationTab
 import bo.com.bmsc.gamification.presentation.GamificationViewModel
 import bo.com.bmsc.gamification.presentation.composable.BadgesTabContent
 import bo.com.bmsc.gamification.presentation.composable.NextContributionCard
-import bo.com.bmsc.gamification.presentation.composable.RankingTabContent
 import bo.com.bmsc.gamification.presentation.composable.StreakHeroSection
 import bo.com.bmsc.gamification.presentation.composable.WeeklyProgressCard
-import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
+
+data class MenuButton(
+  val label: String,
+  val icon: @Composable () -> Unit
+)
+
+@Composable
+fun MenuButtonCard(
+  button: MenuButton,
+  onClick: () -> Unit,
+  modifier: Modifier = Modifier
+) {
+  Surface(
+    onClick = onClick,
+    modifier = modifier,
+    shape = RoundedCornerShape(16.dp),
+    color = Color.White,
+  ) {
+    Column(
+      modifier = Modifier
+        .padding(16.dp)
+        .width(100.dp),
+      horizontalAlignment = Alignment.CenterHorizontally,
+      verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+      Box(
+        modifier = Modifier
+          .size(40.dp)
+          .background( MentaPrimary.copy(alpha = 0.1f), CircleShape ),
+        contentAlignment = Alignment.Center
+      ) {
+        CompositionLocalProvider(
+          LocalContentColor provides  MentaPrimary
+        ) {
+          button.icon()
+        }
+      }
+      Text(
+        text = button.label,
+        fontSize = 12.sp,
+        fontWeight = FontWeight.Bold,
+      )
+    }
+  }
+}
+
+@Composable
+fun MenuButtonGrid(
+  buttons: List<MenuButton>,
+  onButtonSelected: (Int) -> Unit,
+  modifier: Modifier = Modifier
+) {
+  FlowRow(
+    modifier = modifier.fillMaxWidth(),
+    horizontalArrangement = Arrangement.spacedBy(12.dp, Alignment.CenterHorizontally),
+    verticalArrangement = Arrangement.spacedBy(12.dp)
+  ) {
+    buttons.forEachIndexed { index, button ->
+      MenuButtonCard(
+        button = button,
+        modifier = Modifier.weight(1f),
+        onClick = { onButtonSelected(index) }
+      )
+    }
+  }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -146,72 +217,18 @@ fun GamificationScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            TabRow(
-              selectedTabIndex = if (selectedTab == GamificationTab.BADGES) 0 else 1,
-              containerColor = Color.Transparent,
-              contentColor = MentaPrimary,
-              indicator = { tabPositions ->
-                TabRowDefaults.SecondaryIndicator(
-                  modifier = Modifier.tabIndicatorOffset(tabPositions[if (selectedTab == GamificationTab.BADGES) 0 else 1]),
-                  color = MentaPrimary,
-                  height = 3.dp,
-                )
+            MenuButtonGrid(
+              buttons = listOf(
+                MenuButton("Insignias") { Icon(Icons.Outlined.Star, contentDescription = null) },
+                MenuButton("Ranking") { Icon(Icons.Outlined.EmojiEvents, contentDescription = null) },
+                MenuButton("Grupo") { Icon(Icons.Outlined.Group, contentDescription = null) },
+                MenuButton("Historial") { Icon(Icons.Outlined.History, contentDescription = null) }
+              ),
+              onButtonSelected = { index ->
+                // Navigate to screens
               },
-              divider = {},
               modifier = Modifier.padding(horizontal = 20.dp)
-            ) {
-              Tab(
-                selected = selectedTab == GamificationTab.BADGES,
-                onClick = { viewModel.onTabClick(GamificationTab.BADGES) },
-                selectedContentColor = MentaPrimary,
-                unselectedContentColor = MentaOnSurfaceVariant,
-              ) {
-                Row(
-                  horizontalArrangement = Arrangement.Center,
-                  verticalAlignment = Alignment.CenterVertically,
-                  modifier = Modifier.padding(vertical = 12.dp)
-                ) {
-                  Text(
-                    text = "Insignias",
-                    fontWeight = if (selectedTab == GamificationTab.BADGES) FontWeight.Bold else FontWeight.Normal,
-                  )
-                }
-              }
-              Tab(
-                selected = selectedTab == GamificationTab.RANKING,
-                onClick = { viewModel.onTabClick(GamificationTab.RANKING) },
-                selectedContentColor = MentaPrimary,
-                unselectedContentColor = MentaOnSurfaceVariant,
-              ) {
-                Row(
-                  horizontalArrangement = Arrangement.Center,
-                  verticalAlignment = Alignment.CenterVertically,
-                  modifier = Modifier.padding(vertical = 12.dp)
-                ) {
-                  Text(
-                    text = "Ranking",
-                    fontWeight = if (selectedTab == GamificationTab.RANKING) FontWeight.Bold else FontWeight.Normal,
-                  )
-                }
-              }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            when (selectedTab) {
-              GamificationTab.BADGES -> {
-                BadgesTabContent(
-                  badges = state.data.badges,
-                  onBadgeClick = { viewModel.onBadgeClick(it) },
-                )
-              }
-              GamificationTab.RANKING -> {
-                RankingTabContent(
-                  ranking = state.data.ranking,
-                  onRankingItemClick = { viewModel.onRankingItemClick(it) },
-                )
-              }
-            }
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
           }
