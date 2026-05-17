@@ -4,6 +4,7 @@ import kotlinx.datetime.Instant
 import platform.Foundation.NSDateFormatter
 import platform.Foundation.dateWithTimeIntervalSince1970
 
+@Suppress("DEPRECATION")
 actual fun Instant.format(format: String): String {
     val dateFormatter = NSDateFormatter()
     dateFormatter.dateFormat = format

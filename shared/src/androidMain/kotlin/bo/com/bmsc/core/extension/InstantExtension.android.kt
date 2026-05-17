@@ -6,6 +6,7 @@ import kotlinx.datetime.Instant
 import java.text.SimpleDateFormat
 import java.util.Date
 
+@Suppress("DEPRECATION")
 actual fun Instant.format(format: String): String {
   val formatter = SimpleDateFormat(format, Locale.current.platformLocale)
 

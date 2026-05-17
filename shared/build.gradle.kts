@@ -106,6 +106,12 @@ tasks.named("generateActualResourceCollectorsForAndroidMain") {
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().configureEach {
     dependsOn("generateFileResources")
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-Xsuppress-version-warnings",
+            "-Xsuppress-deprecation-warnings"
+        )
+    }
 }
 
 

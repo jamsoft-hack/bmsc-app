@@ -44,4 +44,17 @@ interface Route {
 
   @Serializable
   data object Gamification : Route
+
+  // Racha (Mi Chanchito) routes
+  @Serializable
+  data object RachaOnboarding : Route
+
+  @Serializable
+  data object RachaInvitePeople : Route
+
+  @Serializable
+  data object RachaConfigureSeason : Route
+
+  @Serializable
+  data object RachaConfirm : Route
 }

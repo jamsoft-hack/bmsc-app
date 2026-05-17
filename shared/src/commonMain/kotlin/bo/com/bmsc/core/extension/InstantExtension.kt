@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package bo.com.bmsc.core.extension
 
 import bo.com.bmsc.core.locale.AppLang

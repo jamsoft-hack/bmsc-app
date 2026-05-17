@@ -143,6 +143,7 @@ fun MenuButtonGrid(
 @Composable
 fun GamificationScreen(
   viewModel: GamificationViewModel = koinViewModel(),
+  navigationHelper: NavigationHelper = org.koin.compose.koinInject(),
   onBackClick: () -> Unit = {},
   onSettingsClick: () -> Unit = {},
   bottomNavPadding: Dp = 80.dp,
@@ -219,13 +220,16 @@ fun GamificationScreen(
 
             MenuButtonGrid(
               buttons = listOf(
+                MenuButton("Crear racha") { Icon(Icons.Outlined.Group, contentDescription = null) },
                 MenuButton("Insignias") { Icon(Icons.Outlined.Star, contentDescription = null) },
                 MenuButton("Ranking") { Icon(Icons.Outlined.EmojiEvents, contentDescription = null) },
-                MenuButton("Grupo") { Icon(Icons.Outlined.Group, contentDescription = null) },
                 MenuButton("Historial") { Icon(Icons.Outlined.History, contentDescription = null) }
               ),
               onButtonSelected = { index ->
-                // Navigate to screens
+                when (index) {
+                  0 -> navigationHelper.navigateTo(bo.com.bmsc.Route.RachaOnboarding)
+                  else -> {} // TODO: Other navigation
+                }
               },
               modifier = Modifier.padding(horizontal = 20.dp)
             )

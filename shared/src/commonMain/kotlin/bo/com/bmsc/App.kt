@@ -20,6 +20,10 @@ import bo.com.bmsc.core.navigation.NavigationEvent
 import bo.com.bmsc.core.navigation.NavigationHelper
 import bo.com.bmsc.gamification.presentation.screen.GamificationScreen
 import bo.com.bmsc.home.presentation.screen.HomeScreen
+import bo.com.bmsc.racha.presentation.screen.ConfirmRachaScreen
+import bo.com.bmsc.racha.presentation.screen.ConfigureSeasonScreen
+import bo.com.bmsc.racha.presentation.screen.InvitePeopleScreen
+import bo.com.bmsc.racha.presentation.screen.RachaOnboardingScreen
 import bo.com.bmsc.streak.presentation.screen.CreateStreakScreen
 import org.koin.compose.koinInject
 
@@ -97,6 +101,37 @@ private fun AppNavigation(
       CreateStreakScreen(
         onNavigateBack = { navController.safePopBackStack() },
         onNavigateToNextStep = { /* TODO: Step 2 */ },
+      )
+    }
+
+    // Racha (Mi Chanchito) Flow
+    composable<Route.RachaOnboarding> {
+      RachaOnboardingScreen(
+        onContinue = { navController.safeNavigate(Route.RachaInvitePeople) },
+      )
+    }
+
+    composable<Route.RachaInvitePeople> {
+      InvitePeopleScreen(
+        onBack = { navController.safePopBackStack() },
+        onContinue = { navController.safeNavigate(Route.RachaConfigureSeason) },
+      )
+    }
+
+    composable<Route.RachaConfigureSeason> {
+      ConfigureSeasonScreen(
+        onBack = { navController.safePopBackStack() },
+        onContinue = { navController.safeNavigate(Route.RachaConfirm) },
+      )
+    }
+
+    composable<Route.RachaConfirm> {
+      ConfirmRachaScreen(
+        onBack = { navController.safePopBackStack() },
+        onConfirm = {
+          // TODO: Show success and navigate to home
+          navController.replace(Route.Home)
+        },
       )
     }
 
