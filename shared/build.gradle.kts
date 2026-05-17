@@ -1,3 +1,4 @@
+import com.android.manifmerger.ManifestSystemProperty
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -5,6 +6,9 @@ plugins {
     alias(libs.plugins.androidMultiplatformLibrary)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.room)
 }
 
 kotlin {
@@ -37,6 +41,17 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
+
+            // koin
+            implementation(libs.koin.android)
+            implementation(libs.koin.androidx.compose)
+            implementation(libs.koin.androidx.workmanager)
+
+            // ktor
+            implementation(libs.ktor.client.okhttp)
+        }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
         commonMain.dependencies {
             implementation(libs.compose.runtime)
@@ -47,9 +62,94 @@ kotlin {
             implementation(libs.compose.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
+
+            implementation(libs.room.runtime)
+            implementation(libs.sqlite.bundled)
+
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.serialization.json)
+
+
+            // koin
+            api(libs.koin.core)
+            implementation(libs.koin.compose)
+            implementation(libs.koin.compose.viewmodel)
+
+            implementation(libs.navigation.compose)
+
+            // coil
+            implementation(libs.coil.compose)
+            implementation(libs.coil.svg)
+
+            // ktor
+            implementation(libs.ktor.client.core)
+            implementation(libs.bundles.ktor)
+            implementation(libs.bundles.coil)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+    }
+}
+
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
+
+// Configuration for SVG to Compose task
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
+    dependencies {
+        // Add SVG to Compose as a build script dependency
+        classpath("com.github.DevSrSouza:svg-to-compose:0.11.0") {
+            exclude(group = "com.sun.activation", module = "javax.activation")
+            exclude(group = "javax.activation", module = "activation")
+            exclude(group = "javax.activation", module = "javax.activation-api")
+            exclude(group = "org.ogce", module = "xpp3")
+        }
+    }
+}
+
+tasks.register("generateFileResources") {
+    val sep = File.separator
+    var resourcePath = "${layout.projectDirectory.asFile.absolutePath}/src/commonMain/resources/"
+    resourcePath = resourcePath.replace(oldValue = "/", sep)
+
+    val assets = listOf("vectors", "icons")
+    val outputPath = "${layout.buildDirectory.get()}/generated/source/svg2compose/kotlin"
+    val outputDir = File(outputPath.replace(oldValue = "/", sep))
+
+    doFirst {
+        assets.forEach {
+            val assetsDir = File("$resourcePath$it")
+
+            assetsDir.mkdirs()
+        }
+        outputDir.mkdirs()
+    }
+
+    doLast {
+        assets.forEach { asset ->
+            val assetsDir = File("$resourcePath$asset")
+
+            if (assetsDir.exists() && assetsDir.listFiles()?.any { it.extension == "svg" } == true) {
+                br.com.devsrsouza.svg2compose.Svg2Compose.parse(
+                    applicationIconPackage = "bo.com.bmsc.assets",
+                    accessorName = "BMSC${asset.replaceFirstChar { it.uppercase() }}",
+                    outputSourceDirectory = outputDir,
+                    vectorsDirectory = assetsDir,
+                    type = br.com.devsrsouza.svg2compose.VectorType.SVG,
+                    generatePreview = false,
+                    allAssetsPropertyName = "AllAssets"
+                )
+                println("SVG to Compose conversion completed. Files generated in ${outputDir.absolutePath}")
+            } else {
+                println("No SVG files found in ${assetsDir.absolutePath}")
+            }
         }
     }
 }

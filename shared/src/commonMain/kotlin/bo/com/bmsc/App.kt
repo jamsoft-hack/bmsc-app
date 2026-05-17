@@ -18,11 +18,12 @@ import org.jetbrains.compose.resources.painterResource
 
 import bmsc.shared.generated.resources.Res
 import bmsc.shared.generated.resources.compose_multiplatform
+import bo.com.bmsc.app.theme.BarikTheme
 
 @Composable
 @Preview
 fun App() {
-    MaterialTheme {
+    BarikTheme {
         var showContent by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier

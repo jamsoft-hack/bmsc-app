@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="auth_login_page_title">Identification</string>
+    <string name="about_property_notice">This application is owned and\npatented by CTB</string>
+    <string name="about_privacy_policy">PRIVACY POLICY</string>
+    <string name="action_back">Back</string>
+    <string name="action_go_back">Go back</string>
+    <string name="dialog_confirmation_title_attention">Attention</string>
+    <string name="dialog_confirmation_delete_proof_information">Are you sure you want to remove the payment receipt from the phone memory? **This option cannot be undone**</string>
+    <string name="action_accept">ACCEPT</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_collapse">Collapse</string>
+    <string name="action_delete">DELETE</string>
+    <string name="action_share">SHARE</string>
+    <string name="action_show">SHOW</string>
+    <string name="generic_loading">Please wait...</string>
+    <string name="page_title_error_unknown">Unknown error</string>
+    <string name="page_title_error_old_app">Old app version</string>
+    <string name="page_title_error_app_maintenance">App under maintenance</string>
+    <string name="page_title_error_server">Server error</string>
+    <string name="page_title_error_connection">Connection error</string>
+    <string name="connection_info_server_error">A server error has occurred.\nPlease try again later.</string>
+    <string name="connection_info_server_maintenance">We are updating the application.\nPlease try again later.</string>
+    <string name="connection_info_old_app_version">Your application version does not support the new features.</string>
+    <string name="connection_info_unknown_server_error">An error has occurred. Try again later. If the problem persists, uninstall and reinstall the application.</string>
+    <string name="connection_info_check_connection">Unable to connect to the server. Check your Internet connection.</string>
+</resources>
