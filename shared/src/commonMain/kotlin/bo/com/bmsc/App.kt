@@ -67,7 +67,7 @@ private fun AppNavigation(
 
   NavHost(
     navController = navController,
-    startDestination = Route.Login,
+    startDestination = Route.Gamification,
   ) {
     composable<Route.Login> {
       LoginScreen(
