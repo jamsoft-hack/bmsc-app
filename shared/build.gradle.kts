@@ -1,4 +1,3 @@
-import com.android.manifmerger.ManifestSystemProperty
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -39,6 +38,10 @@ kotlin {
     }
     
     sourceSets {
+        commonMain {
+            kotlin.srcDir(layout.buildDirectory.dir("generated/source/svg2compose/kotlin"))
+        }
+
         androidMain.dependencies {
             implementation(libs.compose.uiToolingPreview)
 
@@ -57,6 +60,7 @@ kotlin {
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)
             implementation(libs.compose.material3)
+            implementation("org.jetbrains.compose.material:material-icons-extended:1.7.3")
             implementation(libs.compose.ui)
             implementation(libs.compose.components.resources)
             implementation(libs.compose.uiToolingPreview)
@@ -94,6 +98,14 @@ kotlin {
 
 room {
     schemaDirectory("$projectDir/schemas")
+}
+
+tasks.named("generateActualResourceCollectorsForAndroidMain") {
+    dependsOn("generateFileResources")
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask<*>>().configureEach {
+    dependsOn("generateFileResources")
 }
 
 

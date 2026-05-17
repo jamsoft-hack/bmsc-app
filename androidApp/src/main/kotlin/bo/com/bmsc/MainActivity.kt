@@ -11,6 +11,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import bo.com.bmsc.core.di.initModules
+import org.koin.core.logger.Level
 
 class MainActivity : ComponentActivity() {
     companion object {
@@ -30,6 +32,14 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         instance = this
+
+        initModules(
+            config = {
+//                androidLogger(Level.DEBUG)
+//                androidContext(this)
+            },
+        )
+
 
         setContent {
             App()
