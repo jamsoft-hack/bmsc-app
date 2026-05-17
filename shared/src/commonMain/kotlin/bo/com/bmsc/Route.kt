@@ -35,4 +35,7 @@ interface Route {
 
   @Serializable
   data object PendingOperation : Route
+
+  @Serializable
+  data object Gamification : Route
 }

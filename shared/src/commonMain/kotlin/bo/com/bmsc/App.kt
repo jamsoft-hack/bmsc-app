@@ -4,24 +4,91 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import bo.com.bmsc.app.theme.BMSCTheme
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import bo.com.bmsc.core.navigation.NavigationEvent
+import bo.com.bmsc.core.navigation.NavigationHelper
+import bo.com.bmsc.gamification.presentation.screen.GamificationScreen
 import bo.com.bmsc.home.presentation.screen.HomeScreen
-import kotlinx.serialization.Serializable
-
-@Serializable
-object Home
+import bo.com.bmsc.app.theme.BMSCTheme
+import bo.com.bmsc.core.extension.replace
+import org.koin.compose.koinInject
 
 @Composable
-@Preview
 fun App() {
-    BMSCTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            HomeScreen()
-        }
+  val navController = rememberNavController()
+  val navigationHelper: NavigationHelper = koinInject()
+
+  BMSCTheme {
+    Surface(
+      modifier = Modifier.fillMaxSize(),
+      color = MaterialTheme.colorScheme.background
+    ) {
+      AppNavigation(
+        navController = navController,
+        navigationHelper = navigationHelper
+      )
     }
+  }
+}
+
+@Composable
+private fun AppNavigation(
+  navController: NavHostController,
+  navigationHelper: NavigationHelper
+) {
+  val navigationEvent by navigationHelper.navigationEvents.collectAsStateWithLifecycle(
+    initialValue = null
+  )
+
+  LaunchedEffect(navigationEvent) {
+    when (val event = navigationEvent) {
+      is NavigationEvent.NavigateTo -> {
+        navController.safeNavigate(event.route)
+      }
+      NavigationEvent.NavigateBack -> {
+        navController.safePopBackStack()
+      }
+      is NavigationEvent.Replace -> {
+        navController.replace(event.route)
+      }
+      null -> Unit
+    }
+  }
+
+  NavHost(
+    navController = navController,
+    startDestination = Route.Home
+  ) {
+    composable<Route.Home> {
+      HomeScreen(
+        onMenuClick = { /* Handle menu click */ },
+        onNavItemClick = { /* Handle nav item click */ }
+      )
+    }
+
+    composable<Route.Gamification> {
+      GamificationScreen(
+        onBackClick = { navigationHelper.navigateBack() }
+      )
+    }
+
+    // Add more routes here as needed
+  }
+}
+
+private fun NavHostController.safeNavigate(route: Route) {
+  navigate(route) {
+    launchSingleTop = true
+  }
+}
+
+private fun NavHostController.safePopBackStack(): Boolean {
+  return popBackStack()
 }

@@ -70,6 +70,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import bmsc.shared.generated.resources.Res
 import bmsc.shared.generated.resources.small_pig_mascot
 import bo.com.bmsc.app.theme.AppDimens
+import bo.com.bmsc.core.navigation.NavigationHelper
 import bo.com.bmsc.app.theme.MentaOnBackground
 import bo.com.bmsc.app.theme.MentaOnPrimary
 import bo.com.bmsc.app.theme.MentaOnSurface
@@ -85,6 +86,7 @@ import bo.com.bmsc.app.theme.PiggyGreen
 import bo.com.bmsc.app.theme.PiggyGreenContainer
 import bo.com.bmsc.app.theme.StreakOrange
 import bo.com.bmsc.app.theme.StreakOrangeContainer
+import bo.com.bmsc.Route
 import bo.com.bmsc.assets.BMSCVectors
 import bo.com.bmsc.assets.bmscvectors.Card
 import bo.com.bmsc.assets.bmscvectors.SmallPigMascot
@@ -97,11 +99,13 @@ import bo.com.bmsc.home.domain.model.PromoBanner
 import bo.com.bmsc.home.presentation.HomeViewModel
 import bo.com.bmsc.home.presentation.composable.QuickActionsSection
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
   viewModel: HomeViewModel = koinViewModel(),
+  navigationHelper: NavigationHelper = koinInject(),
   onMenuClick: () -> Unit = {},
   onNavItemClick: (String) -> Unit = {},
 ) {
@@ -123,6 +127,7 @@ fun HomeScreen(
           onToggleBalance = { viewModel.toggleBalanceVisibility() },
           onQuickActionClick = { viewModel.onQuickActionClick(it) },
           onAccountClick = { viewModel.onAccountClick(it) },
+          onGamificationClick = { navigationHelper.navigateTo(Route.Gamification) },
           bottomNavPadding = 80.dp,
         )
       }
@@ -158,6 +163,7 @@ private fun HomeContent(
   onToggleBalance: () -> Unit,
   onQuickActionClick: (String) -> Unit,
   onAccountClick: (String) -> Unit,
+  onGamificationClick: () -> Unit,
   bottomNavPadding: Dp,
 ) {
   Column(
@@ -238,7 +244,10 @@ private fun HomeContent(
 
     homeData.promoBanner?.let { banner ->
       Spacer(modifier = Modifier.height(12.dp))
-      PromoBannerCard(banner = banner)
+      PromoBannerCard(
+        banner = banner,
+        onClick = onGamificationClick
+      )
     }
 
     AccountSection(
@@ -291,7 +300,10 @@ private fun BalanceCard(
 }
 
 @Composable
-private fun PromoBannerCard(banner: PromoBanner) {
+private fun PromoBannerCard(
+  banner: PromoBanner,
+  onClick: () -> Unit = {}
+) {
   BaseElevatedCard(
     modifier = Modifier
       .fillMaxWidth()
@@ -299,7 +311,7 @@ private fun PromoBannerCard(banner: PromoBanner) {
     colors = CardDefaults.elevatedCardColors(
       containerColor = Color(0xFF6D63FF)
     ),
-    onClick = {}
+    onClick = onClick
   ) {
     Row(
       modifier = Modifier
