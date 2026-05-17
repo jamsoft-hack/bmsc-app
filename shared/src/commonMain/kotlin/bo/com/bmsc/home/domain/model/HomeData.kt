@@ -1,7 +1,6 @@
 package bo.com.bmsc.home.domain.model
 
 import androidx.compose.ui.graphics.vector.ImageVector
-import bo.com.bmsc.assets.BMSCIcons
 
 data class HomeData(
   val totalBalance: Double,

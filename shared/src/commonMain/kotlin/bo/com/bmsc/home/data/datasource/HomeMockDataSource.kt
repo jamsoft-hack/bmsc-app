@@ -1,10 +1,11 @@
 package bo.com.bmsc.home.data.datasource
 
-import bo.com.bmsc.assets.BMSCIcons
-import bo.com.bmsc.assets.bmscicons.BarikNfc
-import bo.com.bmsc.assets.bmscicons.ChangeCard
-import bo.com.bmsc.assets.bmscicons.Coins
-import bo.com.bmsc.assets.bmscicons.Document
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.QrCode
+import androidx.compose.material.icons.filled.SwapHoriz
+import androidx.compose.material.icons.outlined.AccountBalance
+import androidx.compose.material.icons.outlined.Article
+import androidx.compose.material.icons.outlined.CreditCard
 import bo.com.bmsc.home.domain.model.AccountInfo
 import bo.com.bmsc.home.domain.model.AccountType
 import bo.com.bmsc.home.domain.model.HomeData
@@ -30,17 +31,17 @@ class HomeMockDataSource {
       QuickAction(
         id = "services",
         title = "Servicios",
-        icon = BMSCIcons.Document,
+        icon = Icons.Outlined.Article,
       ),
       QuickAction(
         id = "qr",
         title = "QR",
-        icon = BMSCIcons.BarikNfc,
+        icon = Icons.Filled.QrCode,
       ),
       QuickAction(
         id = "transfer",
         title = "Transferir",
-        icon = BMSCIcons.Coins,
+        icon = Icons.Filled.SwapHoriz,
       ),
     )
   }
@@ -62,7 +63,7 @@ class HomeMockDataSource {
         number = "5525",
         balance = "Bs 10.358,30",
         availableAmount = 10358.30,
-        icon = BMSCIcons.Coins,
+        icon = Icons.Outlined.AccountBalance,
       ),
       AccountInfo(
         id = "credit_1",
@@ -70,7 +71,7 @@ class HomeMockDataSource {
         number = "6266",
         balance = "Bs 2.100,00",
         availableAmount = 2100.00,
-        icon = BMSCIcons.ChangeCard,
+        icon = Icons.Outlined.CreditCard,
       ),
     )
   }

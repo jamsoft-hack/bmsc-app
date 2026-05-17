@@ -42,13 +42,14 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
-            App()
             val darkStyle = SystemBarStyle.light(Color.TRANSPARENT, Color.TRANSPARENT)
 
             enableEdgeToEdge(
                 statusBarStyle = darkStyle,
                 navigationBarStyle = darkStyle,
             )
+
+            App()
         }
     }
 
