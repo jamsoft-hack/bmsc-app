@@ -7,21 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-<<<<<<< HEAD
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import bo.com.bmsc.core.navigation.NavigationEvent
-import bo.com.bmsc.core.navigation.NavigationHelper
-import bo.com.bmsc.gamification.presentation.screen.GamificationScreen
-import bo.com.bmsc.home.presentation.screen.HomeScreen
-import bo.com.bmsc.app.theme.BMSCTheme
-import bo.com.bmsc.core.extension.replace
-import org.koin.compose.koinInject
-=======
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -29,28 +16,26 @@ import bo.com.bmsc.app.theme.BMSCTheme
 import bo.com.bmsc.auth.presentation.screen.LoginScreen
 import bo.com.bmsc.core.extension.replace
 import bo.com.bmsc.core.extension.safePopBackStack
+import bo.com.bmsc.core.navigation.NavigationEvent
+import bo.com.bmsc.core.navigation.NavigationHelper
+import bo.com.bmsc.gamification.presentation.screen.GamificationScreen
 import bo.com.bmsc.home.presentation.screen.HomeScreen
 import bo.com.bmsc.streak.presentation.screen.CreateStreakScreen
-import kotlinx.serialization.Serializable
-
-@Serializable
-object Home
->>>>>>> 80f06f9 (implementation login)
+import org.koin.compose.koinInject
 
 @Composable
 fun App() {
-<<<<<<< HEAD
   val navController = rememberNavController()
   val navigationHelper: NavigationHelper = koinInject()
 
   BMSCTheme {
     Surface(
       modifier = Modifier.fillMaxSize(),
-      color = MaterialTheme.colorScheme.background
+      color = MaterialTheme.colorScheme.background,
     ) {
       AppNavigation(
         navController = navController,
-        navigationHelper = navigationHelper
+        navigationHelper = navigationHelper,
       )
     }
   }
@@ -59,10 +44,10 @@ fun App() {
 @Composable
 private fun AppNavigation(
   navController: NavHostController,
-  navigationHelper: NavigationHelper
+  navigationHelper: NavigationHelper,
 ) {
   val navigationEvent by navigationHelper.navigationEvents.collectAsStateWithLifecycle(
-    initialValue = null
+    initialValue = null,
   )
 
   LaunchedEffect(navigationEvent) {
@@ -82,18 +67,36 @@ private fun AppNavigation(
 
   NavHost(
     navController = navController,
-    startDestination = Route.Home
+    startDestination = Route.Login,
   ) {
+    composable<Route.Login> {
+      LoginScreen(
+        onNavigateToHome = {
+          navController.replace(Route.Home)
+        },
+        onNavigateToRegister = { /* TODO: Register screen */ },
+        onNavigateToForgotPassword = { /* TODO: Forgot password screen */ },
+        onNavigateToFaceId = { /* TODO: Face ID screen */ },
+      )
+    }
+
     composable<Route.Home> {
       HomeScreen(
         onMenuClick = { /* Handle menu click */ },
-        onNavItemClick = { /* Handle nav item click */ }
+        onNavItemClick = { /* Handle nav item click */ },
       )
     }
 
     composable<Route.Gamification> {
       GamificationScreen(
-        onBackClick = { navigationHelper.navigateBack() }
+        onBackClick = { navigationHelper.navigateBack() },
+      )
+    }
+
+    composable<Route.CreateStreak> {
+      CreateStreakScreen(
+        onNavigateBack = { navController.safePopBackStack() },
+        onNavigateToNextStep = { /* TODO: Step 2 */ },
       )
     }
 
@@ -105,45 +108,4 @@ private fun NavHostController.safeNavigate(route: Route) {
   navigate(route) {
     launchSingleTop = true
   }
-}
-
-private fun NavHostController.safePopBackStack(): Boolean {
-  return popBackStack()
-=======
-    BMSCTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background,
-        ) {
-            val navController = rememberNavController()
-
-            NavHost(
-                navController = navController,
-                startDestination = Route.Login,
-            ) {
-                composable<Route.Login> {
-                    LoginScreen(
-                        onNavigateToHome = {
-                            navController.replace(Route.Home)
-                        },
-                        onNavigateToRegister = { /* TODO: Register screen */ },
-                        onNavigateToForgotPassword = { /* TODO: Forgot password screen */ },
-                        onNavigateToFaceId = { /* TODO: Face ID screen */ },
-                    )
-                }
-
-                composable<Route.Home> {
-                    HomeScreen()
-                }
-
-                composable<Route.CreateStreak> {
-                    CreateStreakScreen(
-                        onNavigateBack = { navController.safePopBackStack() },
-                        onNavigateToNextStep = { /* TODO: Step 2 */ },
-                    )
-                }
-            }
-        }
-    }
->>>>>>> 80f06f9 (implementation login)
 }
