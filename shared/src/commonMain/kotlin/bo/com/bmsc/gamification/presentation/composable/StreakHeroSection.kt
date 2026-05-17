@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -16,6 +17,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocalFireDepartment
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -34,6 +36,8 @@ import bo.com.bmsc.app.theme.MentaOnBackground
 import bo.com.bmsc.app.theme.MentaOnSurface
 import bo.com.bmsc.app.theme.MentaOnSurfaceVariant
 import bo.com.bmsc.app.theme.StreakOrange
+import bo.com.bmsc.common.composable.PigState
+import bo.com.bmsc.common.composable.SavingsPig
 import bo.com.bmsc.gamification.domain.model.StreakInfo
 import org.jetbrains.compose.resources.painterResource
 
@@ -43,69 +47,32 @@ fun StreakHeroSection(
   modifier: Modifier = Modifier,
 ) {
   Column(
-    modifier = modifier.fillMaxWidth(),
-    horizontalAlignment = Alignment.CenterHorizontally
+    modifier = Modifier
+      .fillMaxWidth()
+      .padding(24.dp),
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.Center,
   ) {
-    Box(
-      contentAlignment = Alignment.TopEnd
-    ) {
-      Box(
-        modifier = Modifier
-          .offset(x = 30.dp, y = (-8).dp)
-          .clip(RoundedCornerShape(12.dp))
-          .background(Color(0xFF3B5998))
-          .padding(horizontal = 12.dp, vertical = 6.dp)
-      ) {
-        Text(
-          text = streakInfo.status,
-          color = Color.White,
-          fontSize = 12.sp,
-          fontWeight = FontWeight.Bold
-        )
-      }
-
-      Column(
-        horizontalAlignment = Alignment.CenterHorizontally
-      ) {
-        Box(
-          modifier = Modifier.size(140.dp),
-          contentAlignment = Alignment.Center
-        ) {
-          Icon(
-            painter = painterResource(Res.drawable.small_pig_mascot),
-            contentDescription = null,
-            tint = Color.Unspecified,
-            modifier = Modifier.size(120.dp)
-          )
-
-          Icon(
-            imageVector = Icons.Filled.LocalFireDepartment,
-            contentDescription = null,
-            tint = StreakOrange,
-            modifier = Modifier
-              .size(40.dp)
-              .offset(x = 35.dp, y = 35.dp)
-          )
-        }
-      }
-    }
-
-    Spacer(modifier = Modifier.height(16.dp))
-
+    SavingsPig(
+      modifier = Modifier.size(180.dp),
+      state = PigState.Happy,
+      savingsProgress = 0f,
+    )
+    Spacer(Modifier.height(16.dp))
     Text(
-      text = "${streakInfo.days} días",
-      style = androidx.compose.material3.MaterialTheme.typography.displaySmall,
-      fontSize = 42.sp,
+      text = "Tu cerdito está durmiendo",
+      fontSize = 20.sp,
       fontWeight = FontWeight.Bold,
-      color = MentaOnSurface,
     )
-
-    Spacer(modifier = Modifier.height(4.dp))
-
+    Spacer(Modifier.height(8.dp))
     Text(
-      text = "Racha activa · ${streakInfo.groupName}",
+      text = "Empieza a ahorrar y verás cómo se llena de monedas",
       fontSize = 14.sp,
-      color = MentaOnSurfaceVariant,
+      color = Color.Gray,
     )
+    Spacer(Modifier.height(24.dp))
+    Button(onClick = {}) {
+      Text("Empezar a ahorrar")
+    }
   }
 }
