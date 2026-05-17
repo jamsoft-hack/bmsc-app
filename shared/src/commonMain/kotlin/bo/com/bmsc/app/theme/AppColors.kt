@@ -3,6 +3,7 @@ package bo.com.bmsc.app.theme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import bo.com.bmsc.app.theme.color.BarikThemeColor
+import bo.com.bmsc.app.theme.color.LightColors
 import bo.com.bmsc.core.extension.blendColor
 
 object AppColors {
@@ -17,5 +18,5 @@ object AppColors {
 
   val reactive: BarikThemeColor
     @Composable
-    get() = LocalBarikColors.current
+    get() = LightColors
 }
